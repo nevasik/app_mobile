@@ -11,8 +11,7 @@ class AdminScreen_view(Screen):
         layout = BoxLayout(orientation='vertical')
 
         view_users_btn = Button(text='Просмотреть пользователей', on_press=partial(self.change_screen, 'view_users'))
-        view_all_recipes_btn = Button(text='Просмотреть все рецепты',
-                                      on_press=partial(self.change_screen, 'view_all_recipes'))
+        view_all_recipes_btn = Button(text='Просмотреть все рецепты', on_press=partial(self.change_screen, 'view_all_recipes'))
         back_btn = Button(text='Выйти', on_press=partial(self.change_screen, 'login'))
 
         layout.add_widget(Label(text='Администратор'))

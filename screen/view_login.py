@@ -1,3 +1,4 @@
+import os
 import sqlite3
 
 from kivy.uix.screenmanager import Screen
@@ -7,6 +8,9 @@ from kivy.uix.label import Label
 from kivy.uix.textinput import TextInput
 from hashlib import sha256
 from functools import partial
+
+from database.database import get_db_path
+
 
 class LoginScreen(Screen):
     def __init__(self, **kwargs):
@@ -27,11 +31,13 @@ class LoginScreen(Screen):
 
     def login(self, instance):
         username = self.username.text
-        password = sha256(self.password.text.encode()).hexdigest()
+        hashed_password = sha256(self.password.text.encode()).hexdigest()
 
-        conn = sqlite3.connect("../poplaukhin_db.db")
+        # Подключение к базе данных и добавление рецепта
+        path = get_db_path()
+        conn = sqlite3.connect(path)
         cursor = conn.cursor()
-        cursor.execute("SELECT role FROM users WHERE username=? AND password=?", (username, password))
+        cursor.execute("SELECT role FROM users WHERE username=? AND password=?", (username, hashed_password))
         user = cursor.fetchone()
         conn.close()
 

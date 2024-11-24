@@ -1,4 +1,6 @@
 import sqlite3
+
+from database.database import get_db_path
 from screen.view_login import LoginScreen
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
@@ -36,7 +38,9 @@ class RegistrationScreen(LoginScreen):
         secret_question = self.secret_question.text
         secret_answer = self.secret_answer.text
 
-        conn = sqlite3.connect("../poplaukhin_db.db")
+        # Подключение к базе данных и добавление рецепта
+        path = get_db_path()
+        conn = sqlite3.connect(path)
         cursor = conn.cursor()
         try:
             cursor.execute("""

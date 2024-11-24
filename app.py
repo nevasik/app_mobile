@@ -6,7 +6,7 @@ from screen.view_password import PasswordRecoveryScreen
 from screen.view_login import LoginScreen
 from screen.view_registration import RegistrationScreen
 from core.user import UserScreen
-from screen.view_all_recipes import ViewAllRecipesScreen
+from screen.view_all_recipes import ViewAllRecipesScreen, AddRecipeScreen
 from screen.view_recipes import ViewRecipesScreen
 from screen.view_user import ViewUsersScreen
 
@@ -21,6 +21,8 @@ class Recipes(App):
         sm.add_widget(ViewUsersScreen(name='view_users'))
         sm.add_widget(ViewAllRecipesScreen(name='view_all_recipes'))
         sm.add_widget(ViewRecipesScreen(name='view_recipes'))
+        sm.add_widget(AddRecipeScreen(name='add_recipes'))
+        sm.add_widget(AddRecipeScreen(name='view_recipes'))
         return sm
 
 

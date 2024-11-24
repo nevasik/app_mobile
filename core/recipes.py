@@ -7,6 +7,9 @@ from kivy.uix.label import Label
 from kivy.uix.textinput import TextInput
 from functools import partial
 
+from database.database import get_db_path
+
+
 class RecipesScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -44,7 +47,8 @@ class RecipesScreen(Screen):
             return
 
         # Подключение к базе данных и добавление рецепта
-        conn = sqlite3.connect("../poplaukhin_db.db")
+        path = get_db_path()
+        conn = sqlite3.connect(path)
         cursor = conn.cursor()
         cursor.execute("""
             INSERT INTO recipes (title, ingredients, instructions, category_id)

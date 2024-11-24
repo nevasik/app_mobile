@@ -1,22 +1,25 @@
 import sqlite3
 import os
 
+def get_db_path():
+    project_root = os.path.dirname(os.path.abspath(__file__))
+    return os.path.join(project_root, 'database.db')
+
 def init_db():
-    try:
-        os.mkdir('/Users/mac/PycharmProjects/app_poplaukhin')
-        db_path = os.path.abspath("/Users/mac/PycharmProjects/app_poplaukhin")
+    db_path = get_db_path()
+    if not os.path.exists(db_path):
         conn = sqlite3.connect(db_path)
         cursor = conn.cursor()
 
         cursor.execute("""
-        CREATE TABLE IF NOT EXISTS users (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            username TEXT UNIQUE,
-            password TEXT,
-            role TEXT CHECK(role IN ('admin', 'user')),
-            secret_question TEXT,
-            secret_answer TEXT
-        )
+            CREATE TABLE IF NOT EXISTS users (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                username TEXT UNIQUE,
+                password TEXT,
+                role TEXT CHECK(role IN ('admin', 'user')),
+                secret_question TEXT,
+                secret_answer TEXT
+            )
         """)
 
         cursor.execute("""
@@ -53,9 +56,6 @@ def init_db():
         """)
 
         conn.commit()
+        conn.close()
         print("База данных успешно инициализирована.")
-    except sqlite3.Error as e:
-        print(f"Ошибка базы данных: {e}")
-    finally:
-        if conn:
-            conn.close()
+        print(cursor.fetchall())

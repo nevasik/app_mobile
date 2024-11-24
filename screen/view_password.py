@@ -1,3 +1,4 @@
+import os
 import sqlite3
 
 from kivy.uix.screenmanager import Screen
@@ -7,6 +8,9 @@ from kivy.uix.label import Label
 from kivy.uix.textinput import TextInput
 from hashlib import sha256
 from functools import partial
+
+from database.database import get_db_path
+
 
 class PasswordRecoveryScreen(Screen):
     def __init__(self, **kwargs):
@@ -36,7 +40,9 @@ class PasswordRecoveryScreen(Screen):
         answer = self.secret_answer.text
         new_password = sha256(self.new_password.text.encode()).hexdigest()
 
-        conn = sqlite3.connect("../poplaukhin_db.db")
+        # Подключение к базе данных и добавление рецепта
+        path = get_db_path()
+        conn = sqlite3.connect(path)
         cursor = conn.cursor()
         cursor.execute("""
             SELECT secret_question, secret_answer FROM users WHERE username=?

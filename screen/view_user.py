@@ -1,3 +1,4 @@
+import os
 import sqlite3
 
 from kivy.uix.screenmanager import Screen
@@ -5,6 +6,9 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 from kivy.uix.label import Label
 from functools import partial
+
+from database.database import get_db_path
+
 
 class ViewUsersScreen(Screen):
     def __init__(self, **kwargs):
@@ -22,7 +26,9 @@ class ViewUsersScreen(Screen):
         self.add_widget(layout)
 
     def on_enter(self):
-        conn = sqlite3.connect("../poplaukhin_db.db")
+        # Подключение к базе данных и добавление рецепта
+        path = get_db_path()
+        conn = sqlite3.connect(path)
         cursor = conn.cursor()
         cursor.execute("SELECT id, username, role FROM users")
         self.users = cursor.fetchall()
@@ -41,7 +47,9 @@ class ViewUsersScreen(Screen):
 
     def confirm_delete(self, instance):
         user_to_delete = self.users[0]  # Для примера выбираем первого пользователя (потом можно будет улучшить)
-        conn = sqlite3.connect("../poplaukhin_db.db")
+        # Подключение к базе данных и добавление рецепта
+        path = get_db_path()
+        conn = sqlite3.connect(path)
         cursor = conn.cursor()
         cursor.execute("DELETE FROM users WHERE id=?", (user_to_delete[0],))
         conn.commit()
