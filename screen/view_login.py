@@ -1,13 +1,12 @@
-import os
 import sqlite3
+from functools import partial
+from hashlib import sha256
 
-from kivy.uix.screenmanager import Screen
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 from kivy.uix.label import Label
+from kivy.uix.screenmanager import Screen
 from kivy.uix.textinput import TextInput
-from hashlib import sha256
-from functools import partial
 
 from database.database import get_db_path
 
@@ -33,7 +32,6 @@ class LoginScreen(Screen):
         username = self.username.text
         hashed_password = sha256(self.password.text.encode()).hexdigest()
 
-        # Подключение к базе данных и добавление рецепта
         path = get_db_path()
         conn = sqlite3.connect(path)
         cursor = conn.cursor()

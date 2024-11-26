@@ -6,29 +6,86 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 from kivy.uix.label import Label
 from kivy.uix.textinput import TextInput
+from kivy.uix.image import Image
 from hashlib import sha256
 from functools import partial
+
 
 class RegistrationScreen(LoginScreen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         layout = BoxLayout(orientation='vertical')
 
-        self.username = TextInput(hint_text='Имя пользователя', multiline=False)
-        self.password = TextInput(hint_text='Пароль', multiline=False, password=True)
-        self.secret_question = TextInput(hint_text='Секретный вопрос', multiline=False)
-        self.secret_answer = TextInput(hint_text='Ответ на секретный вопрос', multiline=False)
+        self.background = Image(
+            source='/Users/mac/PycharmProjects/app_poplaukhin/static/background.jpg',
+            allow_stretch=True,
+            keep_ratio=False,
+            size_hint=(1, 1)
+        )
 
-        register_button = Button(text='Зарегистрироваться', on_press=self.register)
-        back_button = Button(text='Назад', on_press=partial(self.change_screen, 'login'))
+        self.username = TextInput(
+            hint_text='Имя пользователя',
+            multiline=False,
+            size_hint=(None, None),
+            size=(300, 50),
+            pos_hint={'center_x': 0.5, 'y': 0.657}
+        )
 
-        layout.add_widget(Label(text='Регистрация'))
+        self.password = TextInput(
+            hint_text='Пароль',
+            multiline=False,
+            size_hint=(None, None),
+            size=(300, 50),
+            pos_hint={'center_x': 0.5, 'y': 0.657},
+            password=True
+        )
+
+        self.secret_question = TextInput(
+            hint_text='Секретный вопрос',
+            multiline=False,
+            size_hint=(None, None),
+            size=(300, 50),
+            pos_hint={'center_x': 0.5, 'y': 0.657},
+        )
+
+        self.secret_answer = TextInput(
+            hint_text='Ответ',
+            multiline=False,
+            size_hint=(None, None),
+            size=(300, 50),
+            pos_hint={'center_x': 0.5, 'y': 0.657},
+        )
+
+        self.error_label = Label(
+            text='', color=(1, 0, 0, 1)
+        )
+
+        register_button = Button(
+            text='Зарегистрироваться',
+            size_hint=(0.5, 0.1),  # Кнопка займет 50% ширины и 10% высоты родителя
+            pos_hint={'center_x': 0.5},  # Выравнивание по центру
+            on_press=self.register,
+        )
+
+        back_button = Button(
+            text='Назад',
+            size_hint=(0.3, 0.1),  # 30% ширины, 10% высоты
+            pos_hint={'center_x': 0.5},  # Центрирование по оси X
+            on_press=partial(self.change_screen, 'login'),
+        )
+
+        self.add_widget(self.background)
+        layout.add_widget(Label(
+            text='Регистрация',
+            color=(0, 0, 0, 1)
+        ))
         layout.add_widget(self.username)
         layout.add_widget(self.password)
         layout.add_widget(self.secret_question)
         layout.add_widget(self.secret_answer)
         layout.add_widget(register_button)
         layout.add_widget(back_button)
+        layout.add_widget(self.error_label)  # Добавляем метку в макет
 
         self.add_widget(layout)
 
@@ -38,7 +95,7 @@ class RegistrationScreen(LoginScreen):
         secret_question = self.secret_question.text
         secret_answer = self.secret_answer.text
 
-        # Подключение к базе данных и добавление рецепта
+        # Подключение к базе данных и добавление пользователя
         path = get_db_path()
         conn = sqlite3.connect(path)
         cursor = conn.cursor()
@@ -50,7 +107,7 @@ class RegistrationScreen(LoginScreen):
             conn.commit()
             self.manager.current = 'login'
         except sqlite3.IntegrityError:
-            self.add_widget(Label(text='Пользователь уже существует!'))
+            self.error_label.text = 'Пользователь уже существует!'  # Обновляем текст ошибки
         finally:
             conn.close()
 
