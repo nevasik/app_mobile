@@ -10,7 +10,6 @@ from kivy.uix.image import Image
 from hashlib import sha256
 from functools import partial
 
-
 class RegistrationScreen(LoginScreen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -64,6 +63,7 @@ class RegistrationScreen(LoginScreen):
             text='Зарегистрироваться',
             size_hint=(0.5, 0.1),  # Кнопка займет 50% ширины и 10% высоты родителя
             pos_hint={'center_x': 0.5},  # Выравнивание по центру
+            background_color=(0, 0.5, 0.7, 1),
             on_press=self.register,
         )
 
@@ -71,6 +71,7 @@ class RegistrationScreen(LoginScreen):
             text='Назад',
             size_hint=(0.3, 0.1),  # 30% ширины, 10% высоты
             pos_hint={'center_x': 0.5},  # Центрирование по оси X
+            background_color=(0.2, 0.7, 0.2, 1),
             on_press=partial(self.change_screen, 'login'),
         )
 
